@@ -1,18 +1,19 @@
- import pandas as pd
 import streamlit as st
+import pandas as pd
 from pathlib import Path
 
-st.title("📊 Análisis de la Campaña Veterinaria")
-
-# Cargar datos
+# --- Cargar datos ---
 @st.cache_data
 def load_data():
-    data_path = Path(__file__).parent / "Veterinaria.csv"  # ojo: mismo nombre que en GitHub
-    return pd.read_csv(data_path, sep=";")  # tu CSV está separado por ;
+    data_path = Path(__file__).parent / "Veterinaria.csv"
+    return pd.read_csv(data_path, sep=";")  # usa ; porque tu CSV está separado por punto y coma
 
 df = load_data()
 
-# Mostrar vista previa
+# --- Título ---
+st.title("📊 Análisis de la Campaña Veterinaria")
+
+# Vista previa
 st.subheader("👀 Vista previa de los datos")
 st.dataframe(df.head())
 
@@ -20,7 +21,7 @@ st.dataframe(df.head())
 st.subheader("📌 Columnas del dataset")
 st.write(list(df.columns))
 
-# Descripción estadística
+# Resumen estadístico
 st.subheader("📈 Resumen estadístico")
 st.write(df.describe(include="all"))
 
@@ -29,4 +30,5 @@ st.subheader("🐶🐱 Filtrar por tipo de mascota")
 tipos = df["MASCOTA_TIPO"].unique()
 opcion = st.selectbox("Selecciona un tipo de mascota:", tipos)
 st.write(df[df["MASCOTA_TIPO"] == opcion].head(20))
+
 
