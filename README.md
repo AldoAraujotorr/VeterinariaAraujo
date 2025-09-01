@@ -13,3 +13,4 @@ App en **Streamlit** para explorar registros de campañas veterinarias.
 Archivo en el repo: `Veterinaria.csv` (separador `;`)
 
 ## Requisitos
+<!-- redeploy: runtime 3.11 -->
