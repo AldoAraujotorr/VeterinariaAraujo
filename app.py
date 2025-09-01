@@ -1,23 +1,24 @@
-# === app.py (versión corta y funcional) ===
+# === app.py (corto y robusto) ===
 import streamlit as st
 import pandas as pd
 from pathlib import Path
 
 st.set_page_config(page_title="Campaña Veterinaria", page_icon="🐾", layout="wide")
 
-# --- carga de datos ---
+# --- CARGA DE DATOS ---
 @st.cache_data
 def load_data():
-    data_path = Path(__file__).parent / "Veterinaria.csv"  # ¡Respeta la V mayúscula!
-    # tu CSV usa ; como separador
+    # ¡Respeta mayúsculas/minúsculas del archivo!
+    data_path = Path(__file__).parent / "Veterinaria.csv"
+    # Tu CSV usa ; como separador
     df = pd.read_csv(data_path, sep=";")
-    # limpia nombres de columnas
+    # Limpia nombres de columnas (evita problemas de variantes)
     df.columns = [c.strip().upper() for c in df.columns]
     return df
 
 df = load_data()
 
-# --- UI mínima ---
+# --- UI ---
 st.title("📊 Análisis de la Campaña Veterinaria")
 st.caption("Vista rápida + filtros + descarga")
 
@@ -33,7 +34,7 @@ with st.expander("Ver top de cada columna"):
         st.markdown(f"**{col}**")
         st.write(df[col].value_counts().head(10))
 
-# --- filtros sencillos (si existen esas columnas) ---
+# --- FILTROS (si existen) ---
 st.subheader("🔎 Filtros")
 col_tipo = next((c for c in df.columns if "MASCOTA_TIPO" in c or "TIPO" in c), None)
 col_sexo = next((c for c in df.columns if "SEXO" in c), None)
@@ -62,7 +63,7 @@ for k, v in filtros.items():
 st.write(f"**Registros filtrados:** {len(df_filtrado)}")
 st.dataframe(df_filtrado.head(20), use_container_width=True)
 
-# --- descarga ---
+# --- DESCARGA ---
 @st.cache_data
 def _to_csv_bytes(d: pd.DataFrame) -> bytes:
     return d.to_csv(index=False).encode("utf-8")
@@ -76,6 +77,3 @@ st.download_button(
 
 st.info("Si no ves filtros, revisa que existan columnas con palabras como TIPO/SEXO (en cualquier variante).")
 # === fin ===
-
-
-
